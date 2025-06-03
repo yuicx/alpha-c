@@ -15,26 +15,13 @@
     header {
       display: flex;
       align-items: center;
-      justify-content: space-between;
       background-color: #ffffff;
       padding: 1rem 2rem;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
     .logo img {
-      height: 40px;
-    }
-
-    .logo-title {
-      font-size: 1.4rem;
-      font-weight: bold;
-      color: #333;
+      height: 60px; /* ← サイズ大きくしたよ！ */
     }
 
     .font-list {
@@ -84,11 +71,10 @@
   </style>
 </head>
 <body>
-  <!-- 🔻 ヘッダーにロゴ追加！ -->
+  <!-- 🔻 ロゴだけ表示にしたヘッダー -->
   <header>
     <div class="logo">
-      <img src="https://alpha-c-ten.vercel.app/img/logo.svg" alt="ロゴ" />
-      <span class="logo-title">Alpha-C FONT</span>
+      <img src="img/logo.png" alt="ロゴ" />
     </div>
   </header>
 
