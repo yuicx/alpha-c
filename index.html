@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SVGフォントダウンロードサイト</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f0f0f0;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    .font-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .font-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 260px;
+      transition: transform 0.2s ease;
+    }
+
+    .font-card:hover {
+      transform: scale(1.05);
+    }
+
+    .svg-preview {
+      width: 100%;
+      height: 120px;
+      margin: 1rem 0;
+      object-fit: contain;
+      background: #f9f9f9;
+      border-radius: 0.5rem;
+      padding: 0.5rem;
+    }
+
+    .download-btn {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .download-btn:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>🖋 SVGフォントダウンロードサイト</h1>
+  <div class="font-list" id="fontList"></div>
+
+  <script>
+    // SVGフォントの情報リスト
+    const fonts = [
+      {
+        name: "ゆるフォント",
+        preview: "fonts/yuru-font.svg",
+        file: "fonts/yuru-font.svg"
+      },
+      {
+        name: "カクカクフォント",
+        preview: "fonts/kakukaku-font.svg",
+        file: "fonts/kakukaku-font.svg"
+      }
+    ];
+
+    const fontList = document.getElementById("fontList");
+
+    fonts.forEach(font => {
+      const card = document.createElement("div");
+      card.className = "font-card";
+
+      const name = document.createElement("h2");
+      name.textContent = font.name;
+
+      const img = document.createElement("img");
+      img.src = font.preview;
+      img.alt = `${font.name}のプレビュー`;
+      img.className = "svg-preview";
+
+      const button = document.createElement("button");
+      button.className = "download-btn";
+      button.textContent = "SVGをダウンロード";
+      button.onclick = () => {
+        const a = document.createElement("a");
+        a.href = font.file;
+        a.download = font.file.split("/").pop();
+        a.click();
+      };
+
+      card.appendChild(name);
+      card.appendChild(img);
+      card.appendChild(button);
+      fontList.appendChild(card);
+    });
+  </script>
+</body>
+</html>
