@@ -8,11 +8,32 @@
     body {
       font-family: sans-serif;
       background: #f0f0f0;
-      padding: 2rem;
-      text-align: center;
+      margin: 0;
+      padding: 0;
     }
 
-    h1 {
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #ffffff;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo img {
+      height: 40px;
+    }
+
+    .logo-title {
+      font-size: 1.4rem;
+      font-weight: bold;
       color: #333;
     }
 
@@ -21,7 +42,7 @@
       flex-wrap: wrap;
       justify-content: center;
       gap: 2rem;
-      margin-top: 2rem;
+      padding: 2rem;
     }
 
     .font-card {
@@ -63,11 +84,17 @@
   </style>
 </head>
 <body>
-  <h1>🖋 SVGフォントダウンロードサイト</h1>
+  <!-- 🔻 ヘッダーにロゴ追加！ -->
+  <header>
+    <div class="logo">
+      <img src="https://alpha-c-ten.vercel.app/img/logo.svg" alt="ロゴ" />
+      <span class="logo-title">Alpha-C FONT</span>
+    </div>
+  </header>
+
   <div class="font-list" id="fontList"></div>
 
   <script>
-    // SVGフォントの情報リスト
     const fonts = [
       {
         name: "ゆるフォント",
