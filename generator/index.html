@@ -2,61 +2,38 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>フォントジェネレーター</title>
+  <title>OTFフォントジェネレーター</title>
   <style>
     body {
+      background: #f7f7f7;
       font-family: sans-serif;
-      background: #f0f0f0;
-      margin: 0;
-      padding: 2rem;
       text-align: center;
+      padding: 2rem;
     }
 
     h1 {
       margin-bottom: 1rem;
     }
 
-    .controls {
-      margin-bottom: 2rem;
-    }
-
-    input[type="text"] {
-      font-size: 1.2rem;
-      padding: 0.5rem;
-      width: 300px;
-    }
-
-    select {
-      font-size: 1rem;
-      padding: 0.5rem;
-      margin-left: 1rem;
+    input, select {
+      padding: 0.6rem;
+      font-size: 1.1rem;
+      margin: 0.5rem;
     }
 
     button {
-      margin-top: 1rem;
-      padding: 0.6rem 1.5rem;
+      padding: 0.6rem 1.2rem;
       font-size: 1rem;
-      border: none;
-      background: #007bff;
+      background: #4CAF50;
       color: white;
+      border: none;
       border-radius: 6px;
       cursor: pointer;
     }
 
-    button:hover {
-      background: #0056b3;
-    }
-
-    svg {
-      width: auto;
-      height: 100px;
+    #preview {
       margin-top: 2rem;
-    }
-
-    #preview-container {
-      background: transparent;
-      margin-top: 2rem;
+      font-size: 3rem;
     }
 
     canvas {
@@ -65,11 +42,64 @@
   </style>
 </head>
 <body>
-  <h1>SVGフォントジェネレーター🖋✨</h1>
+  <h1>🎨OTFフォントジェネレーター</h1>
 
-  <div class="controls">
-    <input type="text" id="textInput" placeholder="好きな文字を入力してね" />
-    <select id="fontSelect">
+  <input type="text" id="textInput" placeholder="テキストを入力してね" />
+  <select id="fontSelect">
+      <option value="fonts/Alpha-C Font V1_1.otf">Alpha-C Font V1.1</option>
+      <option value="fonts/Alpha-CFont-Regular.otf">Alpha-C Font V1</option>  </select>
+  <button onclick="drawText()">生成＆ダウンロード</button>
+
+  <div id="preview">⬆️ 入力してボタン押してね！</div>
+
+  <canvas id="canvas" width="800" height="200"></canvas>
+
+  <script>
+    async function loadFont(name, url) {
+      const font = new FontFace(name, `url(${url})`);
+      await font.load();
+      document.fonts.add(font);
+    }
+
+    async function drawText() {
+      const text = document.getElementById("textInput").value;
+      const fontUrl = document.getElementById("fontSelect").value;
+      const fontName = "customFont";
+
+      if (!text) {
+        alert("テキストを入力してね！");
+        return;
+      }
+
+      await loadFont(fontName, fontUrl);
+
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.font = `80px '${fontName}'`;
+      ctx.fillStyle = "black";
+      ctx.textBaseline = "middle";
+      ctx.textAlign = "center";
+      ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+
+      // プレビュー表示
+      document.getElementById("preview").style.fontFamily = fontName;
+      document.getElementById("preview").textContent = text;
+
+      // ダウンロード
+      const link = document.createElement("a");
+      link.download = "font-image.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    }
+  </script>
+</body>
+</html>
+
+
+
+
       <option value="fonts/Alpha-C Font V1_1.svg">Alpha-C Font V1.1</option>
       <option value="fonts/Alpha-C Font.svg">Alpha-C Font V1</option>
     </select>
