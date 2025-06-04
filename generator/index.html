@@ -93,75 +93,28 @@
       link.href = canvas.toDataURL("image/png");
       link.click();
     }
-  </script>
-</body>
-</html>
+    await loadFont(fontName, fontUrl);
 
+// ✅ ここで一旦DOMに描画してフォントを強制適用！
+document.getElementById("preview").style.fontFamily = fontName;
+document.getElementById("preview").textContent = text;
 
+// ✅ フォントが確実に反映されるのを待ってから描画！
+setTimeout(() => {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.font = `80px '${fontName}'`;
+  ctx.fillStyle = "black";
+  ctx.textBaseline = "middle";
+  ctx.textAlign = "center";
+  ctx.fillText(text, canvas.width / 2, canvas.height / 2);
 
+  // ダウンロード処理
+  const link = document.createElement("a");
+  link.download = "font-image.png";
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}, 100); // ←フォント反映待ち！（100msぐらいでOK）
 
-      <option value="fonts/Alpha-C Font V1_1.svg">Alpha-C Font V1.1</option>
-      <option value="fonts/Alpha-C Font.svg">Alpha-C Font V1</option>
-    </select>
-    <br />
-    <button onclick="generate()">プレビュー＆ダウンロード</button>
-  </div>
-
-  <div id="preview-container"></div>
-  <canvas id="canvas" width="800" height="200"></canvas>
-
-  <script>
-    async function generate() {
-      const text = document.getElementById("textInput").value;
-      const fontURL = document.getElementById("fontSelect").value;
-
-      if (!text) {
-        alert("文字を入力してね！");
-        return;
-      }
-
-      const svgText = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="800" height="200">
-          <style>
-            @font-face {
-              font-family: 'customFont';
-              src: url('${fontURL}');
-            }
-            text {
-              font-family: 'customFont';
-              font-size: 80px;
-              fill: black;
-            }
-          </style>
-          <text x="50" y="120">${text}</text>
-        </svg>
-      `;
-
-      // プレビュー表示
-      const container = document.getElementById("preview-container");
-      container.innerHTML = svgText;
-
-      // PNGとしてCanvasに描画してDL
-      const svgBlob = new Blob([svgText], { type: "image/svg+xml;charset=utf-8" });
-      const url = URL.createObjectURL(svgBlob);
-
-      const img = new Image();
-      img.onload = () => {
-        const canvas = document.getElementById("canvas");
-        const ctx = canvas.getContext("2d");
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 0, 0);
-
-        // ダウンロード
-        const pngUrl = canvas.toDataURL("image/png");
-        const a = document.createElement("a");
-        a.href = pngUrl;
-        a.download = "generated-font.png";
-        a.click();
-        URL.revokeObjectURL(url);
-      };
-      img.src = url;
-    }
   </script>
 </body>
 </html>
