@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>フォントジェネレーター</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f0f0f0;
+      margin: 0;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 1rem;
+    }
+
+    .controls {
+      margin-bottom: 2rem;
+    }
+
+    input[type="text"] {
+      font-size: 1.2rem;
+      padding: 0.5rem;
+      width: 300px;
+    }
+
+    select {
+      font-size: 1rem;
+      padding: 0.5rem;
+      margin-left: 1rem;
+    }
+
+    button {
+      margin-top: 1rem;
+      padding: 0.6rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      background: #007bff;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    svg {
+      width: auto;
+      height: 100px;
+      margin-top: 2rem;
+    }
+
+    #preview-container {
+      background: transparent;
+      margin-top: 2rem;
+    }
+
+    canvas {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>SVGフォントジェネレーター🖋✨</h1>
+
+  <div class="controls">
+    <input type="text" id="textInput" placeholder="好きな文字を入力してね" />
+    <select id="fontSelect">
+      <option value="fonts/yuru-font.svg">ゆるフォント</option>
+      <option value="fonts/kakukaku-font.svg">カクカクフォント</option>
+    </select>
+    <br />
+    <button onclick="generate()">プレビュー＆ダウンロード</button>
+  </div>
+
+  <div id="preview-container"></div>
+  <canvas id="canvas" width="800" height="200"></canvas>
+
+  <script>
+    async function generate() {
+      const text = document.getElementById("textInput").value;
+      const fontURL = document.getElementById("fontSelect").value;
+
+      if (!text) {
+        alert("文字を入力してね！");
+        return;
+      }
+
+      const svgText = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="800" height="200">
+          <style>
+            @font-face {
+              font-family: 'customFont';
+              src: url('${fontURL}');
+            }
+            text {
+              font-family: 'customFont';
+              font-size: 80px;
+              fill: black;
+            }
+          </style>
+          <text x="50" y="120">${text}</text>
+        </svg>
+      `;
+
+      // プレビュー表示
+      const container = document.getElementById("preview-container");
+      container.innerHTML = svgText;
+
+      // PNGとしてCanvasに描画してDL
+      const svgBlob = new Blob([svgText], { type: "image/svg+xml;charset=utf-8" });
+      const url = URL.createObjectURL(svgBlob);
+
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0);
+
+        // ダウンロード
+        const pngUrl = canvas.toDataURL("image/png");
+        const a = document.createElement("a");
+        a.href = pngUrl;
+        a.download = "generated-font.png";
+        a.click();
+        URL.revokeObjectURL(url);
+      };
+      img.src = url;
+    }
+  </script>
+</body>
+</html>
